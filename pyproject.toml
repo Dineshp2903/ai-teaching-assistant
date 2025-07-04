@@ -1,0 +1,23 @@
+[project]
+name = "course_plan"
+version = "0.1.0"
+description = "course_plan using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[tools]>=0.126.0,<1.0.0"
+]
+
+[project.scripts]
+course_plan = "course_plan.main:run"
+run_crew = "course_plan.main:run"
+train = "course_plan.main:train"
+replay = "course_plan.main:replay"
+test = "course_plan.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"

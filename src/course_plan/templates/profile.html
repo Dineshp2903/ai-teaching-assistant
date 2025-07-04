@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Course Planner Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/static/style.css">
+
+  <!-- <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f6f8;
+    }
+
+    header {
+      background-color: #2b5797;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 220px;
+      background-color: #1f3a61;
+      color: white;
+      padding-top: 2rem;
+    }
+
+    .sidebar a {
+      display: block;
+      padding: 1rem 1.5rem;
+      color: white;
+      text-decoration: none;
+    }
+
+    .sidebar a:hover, .sidebar a.active {
+      background-color: #2b5797;
+    }
+
+    .main {
+      flex: 1;
+      padding: 2rem;
+    }
+
+    .card {
+      background-color: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    button {
+      background-color: #2b5797;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #1d3d72;
+    }
+
+    .tabs {
+      display: none;
+    }
+
+    .tabs.active {
+      display: block;
+    }
+  </style> -->
+
+  <script>
+    function showTab(tabId) {
+      const tabs = document.querySelectorAll('.tabs');
+      tabs.forEach(tab => tab.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+
+      const links = document.querySelectorAll('.sidebar a');
+      links.forEach(link => link.classList.remove('active'));
+      document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+    }
+    function showCoursesContent() {
+      // alert("Fetching courses content dynamically...");
+      const coursesTab = document.getElementById('courses');
+      if (coursesTab.classList.contains('active')) {
+        // If the courses tab is already active, we can fetch the content dynamically
+        fetch('/my-courses')
+          .then(response => response.json())
+          .then(data => {
+              const table = document.getElementById('courses-table');
+              const pre = document.querySelector('#courses .card pre');
+
+              if (!Array.isArray(data) || data.length === 0) {
+                table.innerHTML = '<tr><td colspan="100%">No courses available</td></tr>';
+                pre.textContent = '[]';
+                return;
+              }
+
+              // Generate table headers from keys
+              const headers = Object.keys(data[0]);
+              const thead = document.createElement('thead');
+              thead.classList.add('border');
+              const headRow = document.createElement('tr');
+              headers.forEach(key => {
+                const th = document.createElement('th');
+                th.textContent = key.toUpperCase();
+                headRow.appendChild(th);
+              });
+              thead.appendChild(headRow);
+
+              // Generate table body from values
+              const tbody = document.createElement('tbody');
+              data.forEach(item => {
+                const row = document.createElement('tr');
+                row.classList.add('border');
+                headers.forEach(key => {
+                  const td = document.createElement('td');
+                  td.classList.add('border');
+                  td.textContent = item[key];
+                  row.appendChild(td);
+                });
+                tbody.appendChild(row);
+              });
+
+              // Clear and append
+              table.innerHTML = '';
+              table.appendChild(thead);
+              table.appendChild(tbody);
+
+             
+          })
+          .catch(error => console.error('Error fetching courses:', error));
+      }
+    }
+
+    window.onload = () => showTab('dashboard');
+  </script>
+</head>
+<body>
+  <header>
+    <h1>Course Planner</h1>
+    <div>Welcome, {{ user_name or "User" }}</div>
+  </header>
+
+  <div class="container">
+    <div class="sidebar">
+      <a href="#" data-tab="dashboard" onclick="showTab('dashboard')">Dashboard</a>
+      <a href="#"  data-tab="courses" onclick="showTab('courses');showCoursesContent()">Courses</a>
+      <a href="#" data-tab="calendar" onclick="showTab('calendar')">Calendar</a>
+      <a href="#" data-tab="preferences" onclick="showTab('preferences')">Preferences</a>
+    </div>
+
+    <div class="main">
+      <!-- Dashboard Tab -->
+      <div id="dashboard" class="tabs active">
+        <div class="card">
+          <h2>Your Profile</h2>
+          <p><strong>Name:</strong> {{ user_name or "John Doe" }}</p>
+          <p><strong>Email:</strong> {{ user_email or "user@example.com" }}</p>
+          <p><strong>Preferred Learning Style:</strong> {{ user_style or "Visual" }}</p>
+        </div>
+      </div>
+
+      <!-- Courses Tab -->
+      <div id="courses" class="tabs">
+      
+        
+
+        <div class="card">
+          <pre>
+            <table id="courses-table">
+          
+            </table>
+          </pre>
+        </div>
+        
+      </div>
+
+      <!-- Calendar Tab -->
+      <div id="calendar" class="tabs">
+        <div class="card">
+          <h2>Download Calendar</h2>
+          <form action="/generate-ics" method="post">
+            <div class="form-group">
+              <label for="course_topic">Course Topic:</label>
+              <input type="text" id="course_topic" name="course_topic" required>
+            </div>
+            <div class="form-group">
+              <label for="audience_type">Audience Type:</label>
+              <input type="text" id="audience_type" name="audience_type" required>
+            </div>
+            <button type="submit">Download ICS</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Preferences Tab -->
+      <div id="preferences" class="tabs">
+        <div class="card">
+          <h2>Update Preferences</h2>
+          <p>Feature coming soon...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

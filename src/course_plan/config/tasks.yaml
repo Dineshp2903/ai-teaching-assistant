@@ -1,0 +1,88 @@
+course_design_task:
+  description: >
+    Design a structured, engaging week-by-week course syllabus for {course_topic}, 
+    targeting {audience_type}. The syllabus should include modules for each week with subtopics, 
+    learning objectives, recommended activities, tools, and estimated time.
+  expected_output: >
+    A weekly course outline for {course_topic} with:
+    - Week Number
+    - Module Title
+    - Key subtopics
+    - Learning objectives
+    - Estimated duration (hours)
+    - Tools/platforms needed
+    - Assignments or hands-on practice
+    - Prerequisites (if any)
+  agent: course_designer
+
+learning_path_task:
+  description: >
+    Analyze the learner profile, including prior knowledge, goals, and learning style. 
+    Based on this, recommend a personalized week-by-week learning path for the course on {course_topic}.
+  expected_output: >
+    A week-by-week learning plan tailored to different learner personas. Should include:
+    - Sequence of weekly modules
+    - Milestones/checkpoints
+    - Optional readings/tools
+    - Acceleration or revision suggestions
+  agent: learning_path_analyst
+
+content_validation_task:
+  description: >
+    Review the week-by-week course structure and validate the technical depth, clarity, 
+    and relevance of each module in the course for {course_topic}.
+  expected_output: >
+    Validated week-by-week syllabus including:
+    - Comments per module
+    - Suggestions for deeper or simplified coverage
+    - Topics that need addition/removal
+  agent: subject_matter_expert
+
+tech_stack_selection_task:
+  description: >
+    Recommend the ideal EdTech tools and platforms for delivering a weekly structured course on {course_topic} 
+    to {audience_type}. Consider interactivity, engagement, scalability, and monitoring.
+  expected_output: >
+    A mapped list of tech tools per week/module (if needed), such as:
+    - LMS
+    - Coding environments (e.g., Colab, Jupyter)
+    - Discussion forums or community platforms
+    - Progress tracking tools
+  agent: tech_stack_advisor
+  llm:
+    provider: groq
+    model: deepseek-llm-7b
+    api_key: ${GROQ_API_KEY}
+
+feedback_analysis_task:
+  description: >
+    Review weekly learner feedback and performance metrics from pilot testing of {course_topic}. 
+    Identify pacing, comprehension, and engagement issues per week/module.
+  expected_output: >
+    A summary grouped by week/module highlighting:
+    - Common issues
+    - Improvement suggestions
+    - Pacing or complexity adjustments
+  agent: course_feedback_analyst
+
+capstone_project_task:
+  description: >
+    Design a final capstone project that integrates the skills learned across all weeks of {course_topic}.
+  expected_output: >
+    - Project description
+    - Goals and evaluation criteria
+    - Recommended tools
+    - Estimated duration (1-2 weeks)
+  agent: subject_matter_expert
+
+course_suggestion_task:
+  description: >
+    Based on the course design and learner profiles, suggest additional courses that complement {course_topic} 
+    for deeper learning or specialization.
+  expected_output: >
+    A list of suggested courses with:
+    - Course title
+    - Brief description
+    - Target audience
+    - Prerequisites (if any)
+  agent: course_suggestion_agent
