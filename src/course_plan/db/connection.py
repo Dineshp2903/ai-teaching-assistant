@@ -1,15 +1,33 @@
 import psycopg2
 from psycopg2 import sql
 
+# database constants
+DB_NAME = "mydb"
+DB_USER = "postgres"
+DB_PASSWORD = "yaazh"
+DB_HOST = "localhost"
+DB_PORT = "5432"
+
+def get_db_config():
+    """
+    Returns the database configuration as a dictionary.
+    """
+    return {
+        "dbname": DB_NAME,
+        "user": DB_USER,
+        "password": DB_PASSWORD,
+        "host": DB_HOST,
+        "port": DB_PORT
+    }
 
 def get_db_connection():
     try:
         connection = psycopg2.connect(
-            dbname="mydb",
-            user="postgres",
-            password="yaazh",
-            host="localhost",
-            port="5432"
+            dbname=DB_NAME,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            host=DB_HOST,
+            port=DB_PORT
         )
         return connection.cursor()
     except Exception as e:

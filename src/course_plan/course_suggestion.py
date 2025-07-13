@@ -23,7 +23,8 @@ class CourseCrew:
             description=(
                 "Design a structured, engaging week-by-week course syllabus for {course_topic}, "
                 "targeting {audience_type}. The syllabus should include modules for each week with subtopics, "
-                "learning objectives, recommended activities, tools, and estimated time. output should be a detailed and JSON-serializable format."
+                "learning objectives, recommended activities, tools, and estimated time."
+                "Output format: JSON object for course description inside json object create JSON Array for weekly modules use weekly_modules key. Each module is a dictionary with keys: week, module_title, subtopics, learning_objectives, estimated_duration_hours, tools_required, assignments, prerequisites."
             ),
             expected_output=(
                 "A weekly course outline for {course_topic} with:\n"

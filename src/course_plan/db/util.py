@@ -50,6 +50,25 @@ def addCourse(course_data):
     finally:
         close_db_connection(curson)
 
+def add_course_modules(weekly_modules):
+    curson = get_db_connection()
+    if curson is None:
+        return False
+    try:
+        curson.execute(" INSERT into course_modules (course_id, course_title, week, module_title, duration, subtopics, learning_objectives, tools, assignments, prerequisites) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                       (weekly_modules['course_id'], weekly_modules['course_title'], weekly_modules['week'],weekly_modules['module_title'], weekly_modules['duration'], weekly_modules['subtopics'], weekly_modules['learning_objectives'], weekly_modules['tools'], weekly_modules['assignments'], weekly_modules['prerequisites']))
+        course_id = curson.fetchone()[0]
+        print(f"Course added with ID: {course_id}")
+        curson.connection.commit()  # Commit the transaction
+         # Optionally, you can return the course_id or any other relevant information
+         # return course_id
+        return True
+    except Exception as e:
+        print(f"Error adding course: {e}")
+        return False
+    finally:
+        close_db_connection(curson)
+
 def getAllCourses():
     """
     Retrieves all courses from the database.
